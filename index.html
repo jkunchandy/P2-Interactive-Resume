@@ -46,13 +46,13 @@ need to load. You'll see a lot of <link>s to CSS files for styles and
   Uncomment the <script> tag below when you're ready to add an interactive
   Google Map to your resume!
   -->
-  <!-- <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script> -->
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 
   <meta name="viewport" content="width=device-width">
 </head>
 <body unresolved>
   <div id="main">
-    Hello world!   <!-- You'll be deleting this line in the course -->
+   <!--- Hello world! --->  <!-- You'll be deleting this line in the course -->
 
     <!--
     Everything from here to the <script> tag below is the skeleton of your
@@ -63,7 +63,7 @@ need to load. You'll see a lot of <link>s to CSS files for styles and
     <div id="header" class="center-content clearfix">
       <ul id="topContacts" class='flex-box'></ul>
     </div>
-    <div style='clear: both;'></div>
+ <div style='clear: both;'></div>
     <div id="workExperience" class='gray'>
       <h2>Work Experience</h2>
     </div>
@@ -114,26 +114,222 @@ need to load. You'll see a lot of <link>s to CSS files for styles and
     */
 
 
+function displayWork() {
+
+    var formattedData, formattedData2;
+
+      // display name and job title
+    formattedData=HTMLheaderName.replace("%data%",bio.name);
+    $("#header").prepend(formattedData);
+    formattedData=HTMLheaderRole.replace("%data%",bio.role);
+    $("#topContacts").before(formattedData);
+
+      // display contact info and location
+    formattedData = HTMLmobile.replace("%data%", bio.contacts.mobile);
+    $("#topContacts").append(formattedData);
+    formattedData = HTMLemail.replace("%data%", bio.contacts.email);
+    $("#topContacts").append(formattedData);
+    formattedData = HTMLgithub.replace("%data%", bio.contacts.github);
+    $("#topContacts").append(formattedData);
+    formattedData = HTMLtwitter.replace("%data%", bio.contacts.twitter);
+    $("#topContacts").append(formattedData);
+    formattedData = HTMLlocation.replace("%data%", bio.contacts.location);
+    $("#topContacts").append(formattedData);
+
+      // display image
+    formattedData = HTMLbioPic.replace("%data%", bio.bioPic);
+    $("#header").append(formattedData);
+
+      // display welcome message
+    formattedData = HTMLWelcomeMsg.replace("%data%", bio.welcomeMessage);
+    $("#header").append(formattedData);
+
+
+    if(bio.skills.length > 0) {
+      $("#header").append(HTMLskillsStart);
+
+
+      formattedData = HTMLskills.replace("%data%", bio.skills[0]);
+      $("#skills").append(formattedData);
+      formattedData = HTMLskills.replace("%data%", bio.skills[1]);
+      $("#skills").append(formattedData);
+      formattedData = HTMLskills.replace("%data%", bio.skills[2]);
+      $("#skills").append(formattedData);
+      formattedData = HTMLskills.replace("%data%", bio.skills[3]);
+      $("#skills").append(formattedData);
+    }
+
+      // Display Work Experience
+    for(jobIndex in work.jobs) {
+      $("#workExperience").append(HTMLworkStart);
+      var formattedEmployer = HTMLworkEmployer.replace("%data%",work.jobs[jobIndex].employer);
+          formattedEmployer = formattedEmployer.replace("#",work.jobs[jobIndex].url);
+
+      var formattedTitle = HTMLworkTitle.replace("%data%",work.jobs[jobIndex].title);
+      var formattedEmployerTitle = formattedEmployer + formattedTitle;
+      $(".work-entry:last").append(formattedEmployerTitle);
+
+      var formattedDates = HTMLworkDates.replace("%data%",work.jobs[jobIndex].dates);
+      $(".work-entry:last").append(formattedDates);
+
+      var formattedLocation = HTMLworkLocation.replace("%data%",work.jobs[jobIndex].location);
+      $(".work-entry:last").append(formattedLocation);
+
+      var formattedDescription = HTMLworkDescription.replace("%data%",work.jobs[jobIndex].description);
+      $(".work-entry:last").append(formattedDescription);
+
+    }
+}
+
+
+
+
+      // identify location of user click
+   // $(document).click(function(loc) {
+   //    var x = loc.pageX;
+   //    var y = loc.pageY;
+   //    logClicks(x,y);
+
+   // });
+
+
+      // function to internationalize name
+    function inName(str) {
+      //str="Richard Ziff";
+      var Name = str.trim().split(" ");
+      console.log(str);
+      Name[1]=Name[1].toUpperCase();
+      Name[0]=Name[0].slice(0,1).toUpperCase() + Name[0].slice(1).toLowerCase();
+      return(Name[0].concat(" ",Name[1]));
+    }
+
+
+// display google map
+$("#mapDiv").append(googleMap);
+
+
+// Encapsulate display() in projects object
+   projects.display = function() {
+    for(projIndex in projects.projects) {
+      $("#projects").append(HTMLprojectStart);
+      var formattedTitle = HTMLprojectTitle.replace("%data%",projects.projects[projIndex].title);
+      $(".project-entry:last").append(formattedTitle);
+
+      var formattedDates = HTMLprojectDates.replace("%data%",projects.projects[projIndex].dates);
+      $(".project-entry:last").append(formattedDates);
+
+      var formattedDescription = HTMLprojectDescription.replace("%data%",projects.projects[projIndex].description);
+      $(".project-entry:last").append(formattedDescription);
+
+      for(imgIndex in projects.projects[projIndex].images) {
+        var formattedImg = HTMLprojectImage.replace("%data%",projects.projects[projIndex].images[imgIndex]);
+        $(".project-entry:last").append(formattedImg);
+      }
+  }
+}
+
+// Education
+    education.display = function() {
+      for(edIndex in education.schools) {
+          $("#education").append(HTMLschoolStart);
+          formattedData  = HTMLschoolName.replace("%data%",education.schools[edIndex].name);
+          formattedData  = formattedData.replace("#",education.schools[edIndex].schoolUrl);
+          formattedData2 = HTMLschoolDegree.replace("%data%",education.schools[edIndex].degree);
+          formattedData = formattedData.concat(formattedData2);
+          $(".education-entry:last").append(formattedData);
+
+
+
+         // $("#education").append(HTMLschoolStart);
+          formattedData = HTMLschoolDates.replace("%data%",education.schools[edIndex].date);
+          $(".education-entry:last").append(formattedData);
+
+          //$("#education").append(HTMLschoolStart);
+          formattedData = HTMLschoolLocation.replace("%data%",education.schools[edIndex].location);
+          $(".education-entry:last").append(formattedData);
+
+          //$("#education").append(HTMLschoolStart);
+          formattedData = HTMLschoolMajor.replace("%data%",education.schools[edIndex].major);
+          $(".education-entry:last").append(formattedData);
+
+      }
+
+        // Online courses
+
+      if (edIndex in education.onlineCourses) {
+        $("#education:last").append(HTMLonlineClasses);
+        for(edIndex in education.onlineCourses) {
+          $("#education").append(HTMLschoolStart);
+          formattedData = HTMLonlineTitle.replace("%data%",education.onlineCourses[edIndex].title);
+          formattedData2= HTMLonlineSchool.replace("%data%",education.onlineCourses[edIndex].school);
+          formattedData = formattedData.concat(formattedData2);
+          $(".education-entry:last").append(formattedData);
+
+          formattedData = HTMLonlineDates.replace("%data%",education.onlineCourses[edIndex].dates);
+          $(".education-entry:last").append(formattedData);
+
+          formattedData = HTMLonlineURL.replace("%data%",education.onlineCourses[edIndex].url);
+          $(".education-entry:last").append(formattedData);
+        }
+      }
+  }
+
+        // display lets connect contents
+        letsConnect.display = function() {
+            // display contact info and location
+          formattedData = HTMLmobile.replace("%data%", bio.contacts.mobile);
+          $("#footerContacts").append(formattedData);
+          formattedData = HTMLemail.replace("%data%", bio.contacts.email);
+          $("#footerContacts").append(formattedData);
+          formattedData = HTMLgithub.replace("%data%", bio.contacts.github);
+          $("#footerContacts").append(formattedData);
+          formattedData = HTMLtwitter.replace("%data%", bio.contacts.twitter);
+          $("#footerContacts").append(formattedData);
+          formattedData = HTMLlocation.replace("%data%", bio.contacts.location);
+          $("#footerContacts").append(formattedData);
+        }
+
+
+      // display Bio and Work info
+   displayWork();
+
+      // display button to internationalize name
+    $("#main").append(internationalizeButton);
+
+   projects.display();
+   education.display();
+   letsConnect.display();
+
+
+
+
     if(document.getElementsByClassName('flex-item').length === 0) {
-      document.getElementById('topContacts').style.display = 'none';
+      //document.getElementById('topContacts').style.display = 'none';
+      document.getElementById('topContacts').style.backgroundColor = "black";
     }
     if(document.getElementsByTagName('h1').length === 0) {
-      document.getElementById('header').style.display = 'none';
+      //document.getElementById('header').style.display = 'none';
+      document.getElementById('header').style.backgroundColor = "black";
     }
     if(document.getElementsByClassName('work-entry').length === 0) {
-      document.getElementById('workExperience').style.display = 'none';
-    }
-    if(document.getElementsByClassName('project-entry').length === 0) {
-      document.getElementById('projects').style.display = 'none';
+      //document.getElementById('workExperience').style.display = 'none';
+      document.getElementById('workExperience').style.backgroundColor = "black";
     }
     if(document.getElementsByClassName('education-entry').length === 0) {
-      document.getElementById('education').style.display = 'none';
+      //document.getElementById('projects').style.display = 'none';
+      document.getElementById('projects').style.backgroundColor = "black";
+    }
+    if(document.getElementsByClassName('education-entry').length === 0) {
+      // document.getElementById('education').style.display = 'none';
+      document.getElementById('education').style.backgroundColor = "black";
     }
     if(document.getElementsByClassName('flex-item').length === 0) {
-      document.getElementById('letsConnect').style.display = 'none';
+      //document.getElementById('letsConnect').style.display = 'none';
+      document.getElementById('letsConnect').style.backgroundColor = "black";
     }
     if(document.getElementById('map') === null) {
-      document.getElementById('mapDiv').style.display = 'none';
+      //document.getElementById('mapDiv').style.display = 'none';
+      document.getElementById('mapDiv').style.backgroundColor = "black";
     }
   </script>
 </body>

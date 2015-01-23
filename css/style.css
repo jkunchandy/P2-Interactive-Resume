@@ -182,6 +182,7 @@ span {
   }
 }
 
+/* "only" added immediately after @media to allow older browswers to ignore specified stylsheet info*/
 @media only screen and (max-width: 750px) {
   #letsConnect {
     margin-top: 10%;
