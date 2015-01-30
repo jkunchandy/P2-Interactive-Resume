@@ -70,14 +70,16 @@ $(document).ready(function() {
   });
 });
 
-  // another students code
-//$(document).ready(function() {
-//  $('button').click(function() {
-//    var name = $('#name')[0].innerText;
-//    var iName = inName(name) || function(){};
-//    $('#name').html(iName);
-//  });
-//});
+
+// function to internationalize name
+function inName(str) {
+  //str="Richard Ziff";
+  var Name = str.trim().split(" ");
+  console.log(str);
+  Name[1]=Name[1].toUpperCase();
+  Name[0]=Name[0].slice(0,1).toUpperCase() + Name[0].slice(1).toLowerCase();
+  return(Name[0].concat(" ",Name[1]));
+}
 
 
 
@@ -253,6 +255,8 @@ window.addEventListener('load', initializeMap);
 // Vanilla JS way to listen for resizing of the window
 // and adjust map bounds
 window.addEventListener('resize', function(e) {
-  // Make sure the map bounds get updated on page resize
-  map.fitBounds(mapBounds);
+// Make sure the map bounds get updated on page resize
+map.fitBounds(mapBounds);
+
+
 });
